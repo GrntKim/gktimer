@@ -1,3 +1,6 @@
 export default {
-    base: '/gktimer/'
+    base: '/gktimer/',
+    optimizeDeps: {
+        exclude: ['cubing']
+    }
 }
