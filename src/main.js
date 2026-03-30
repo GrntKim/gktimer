@@ -1,10 +1,34 @@
-import './style.css';
-import './components/scramble';
+import { LitElement, html, css } from "lit";
+import "./components/scramble/index.js";
 
-const app = document.querySelector('#app');
+class MainApp extends LitElement {
+  static styles = css`
+    main {
+      padding: 2rem;
+      font-family: sans-serif;
+    }
+  `;
 
-app.innerHTML = `
-    <main style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+  static properties = {
+    retrievedScramble: { type: String },
+  };
+
+  constructor() {
+    super();
+    this.retrievedScramble = "";
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+  }
+
+  render() {
+    return html`
+      <main>
         <cube-scramble></cube-scramble>
-    </main>
-`
+      </main>
+    `;
+  }
+}
+
+customElements.define("cube-app", MainApp);
