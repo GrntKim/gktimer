@@ -68,6 +68,13 @@ export class CubeTimer extends LitElement {
       if (this.isReady) {
         this.isReady = false;
         this.isRunning = true;
+        this.dispatchEvent(
+          new CustomEvent("timer-running", {
+            detail: this.isRunning,
+            bubbles: true,
+            composed: true,
+          }),
+        );
         this.startTimer();
       }
     }

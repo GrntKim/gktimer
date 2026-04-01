@@ -18,6 +18,7 @@ class MainApp extends LitElement {
     generatedScramble: { type: String },
     records: { type: Array },
     isScrambling: { type: Boolean },
+    isTimerRunning: { type: Boolean },
   };
 
   constructor() {
@@ -42,6 +43,7 @@ class MainApp extends LitElement {
 
         <cube-timer
           @timer-stopped="${this.saveRecord}"
+          @timer-running="${(e) => (this.isTimerRunning = e.detail)}"
           .isScrambling="${this.isScrambling}"
         ></cube-timer>
 
@@ -51,6 +53,7 @@ class MainApp extends LitElement {
   }
 
   async generateNewScramble() {
+    if (this.isTimerRunning) return;
     this.isScrambling = true;
     this.generatedScramble = "Generating...";
     try {
@@ -72,10 +75,7 @@ class MainApp extends LitElement {
       date: new Date(),
     };
     this.records = [...this.records, newRecord];
-
-    console.log(newRecord.time);
-    console.log(newRecord.scramble);
-    console.log(newRecord.date);
+    this.isTimerRunning = false;
     await this.generateNewScramble();
   }
 }
