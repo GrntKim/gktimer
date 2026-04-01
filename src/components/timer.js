@@ -5,7 +5,6 @@ export class CubeTimer extends LitElement {
     .timer-container {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
     }
   `;
@@ -71,7 +70,7 @@ export class CubeTimer extends LitElement {
     }
   };
 
-  async startTimer() {
+  startTimer() {
     if (this._intervalId) clearInterval(this._intervalId);
 
     const startTime = Date.now();
@@ -83,7 +82,7 @@ export class CubeTimer extends LitElement {
     }, 10);
   }
 
-  async stopTimer() {
+  stopTimer() {
     clearInterval(this._intervalId);
     this.isRunning = false;
 
@@ -101,7 +100,7 @@ export class CubeTimer extends LitElement {
     );
   }
 
-  async resetTime() {
+  resetTime() {
     if (this.isRunning) {
       this.stopTimer();
     }
