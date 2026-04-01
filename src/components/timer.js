@@ -13,6 +13,7 @@ export class CubeTimer extends LitElement {
     tens: { type: Number },
     seconds: { type: Number },
     lastRecord: { type: Object },
+    isScrambling: { type: Boolean },
   };
 
   constructor() {
@@ -22,6 +23,7 @@ export class CubeTimer extends LitElement {
     this.isRunning = false;
     this.isReady = false;
     this.lastRecord = null;
+    this.isScrambling = true;
   }
 
   render() {
@@ -50,6 +52,7 @@ export class CubeTimer extends LitElement {
 
   handleKeyDown = (e) => {
     if (e.code == "Space") {
+      if (this.isScrambling && !this.isRunning) return;
       e.preventDefault();
 
       if (!this.isRunning) {

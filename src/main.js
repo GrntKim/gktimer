@@ -17,12 +17,14 @@ class MainApp extends LitElement {
   static properties = {
     generatedScramble: { type: String },
     records: { type: Array },
+    isScrambling: { type: Boolean },
   };
 
   constructor() {
     super();
     this.generatedScramble = "";
     this.records = [];
+    this.isScrambling = true;
   }
 
   connectedCallback() {
@@ -38,7 +40,10 @@ class MainApp extends LitElement {
           @click="${this.generateNewScramble}"
         ></cube-scramble>
 
-        <cube-timer @timer-stopped="${this.saveRecord}"></cube-timer>
+        <cube-timer
+          @timer-stopped="${this.saveRecord}"
+          .isScrambling="${this.isScrambling}"
+        ></cube-timer>
 
         <record-list .records="${this.records}"></record-list>
       </main>
@@ -46,13 +51,17 @@ class MainApp extends LitElement {
   }
 
   async generateNewScramble() {
+    this.isScrambling = true;
     this.generatedScramble = "Generating...";
     try {
       const scrambleAlg = await randomScrambleForEvent("333");
+      this.isScrambling = false;
       this.generatedScramble = scrambleAlg.toString();
     } catch (error) {
       console.error("Failed generating scramble: ", error);
       this.generatedScramble = "An error occured. Please click again.";
+    } finally {
+      this.isScrambling = false;
     }
   }
 
