@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "lit";
-import { randomScrambleForEvent } from "cubing/scramble";
 
 class CubeScramble extends LitElement {
   static styles = css`
@@ -47,34 +46,13 @@ class CubeScramble extends LitElement {
     this.currentScramble = "Generating...";
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-    this.generateNewScramble();
-  }
-
   render() {
     return html`
-      <div
-        class="scramble-container"
-        title="Click to retrieve new scramble"
-        @click=${this.generateNewScramble}
-      >
+      <div class="scramble-container">
         <p class="scramble-text">${this.currentScramble}</p>
         <span class="hint-text">Click to retrieve new scramble</span>
       </div>
     `;
-  }
-
-  async generateNewScramble() {
-    this.currentScramble = "Generating...";
-
-    try {
-      const scrambleAlg = await randomScrambleForEvent("333");
-      this.currentScramble = scrambleAlg.toString();
-    } catch (error) {
-      console.error("Failed generating scramble: ", error);
-      this.currentScramble = "An error occured. Please click again.";
-    }
   }
 }
 
