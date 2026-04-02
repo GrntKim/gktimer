@@ -1,10 +1,16 @@
 import { LitElement, html, css } from "lit";
 import { randomScrambleForEvent } from "cubing/scramble";
+import { setSearchDebug } from "cubing/search";
 import "./components/layouts/footer.js";
 import "./components/layouts/header.js";
 import "./components/scramble.js";
 import "./components/timer.js";
 import "./components/records.js";
+
+// 콘솔에 뜨는 cubing.js 렌더링 성능 경고 로그를 끕니다.
+setSearchDebug({
+  logPerf: false,
+});
 
 class MainApp extends LitElement {
   static properties = {

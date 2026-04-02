@@ -8,7 +8,7 @@ class SiteHeader extends LitElement {
   render() {
     return html`
       <header>
-        <div class="site-logo">GKTimer</div>
+        <div class="site-logo">GKTimer BETA</div>
         <nav class="header-links">
           <ul>
             <li>About</li>
