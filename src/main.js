@@ -1,19 +1,11 @@
 import { LitElement, html, css } from "lit";
 import { randomScrambleForEvent } from "cubing/scramble";
+import "./components/layouts/footer.js";
 import "./components/scramble.js";
 import "./components/timer.js";
 import "./components/records.js";
 
 class MainApp extends LitElement {
-  static styles = css`
-    main {
-      display: flex;
-      flex-direction: column;
-      padding: 2rem;
-      font-family: sans-serif;
-    }
-  `;
-
   static properties = {
     generatedScramble: { type: String },
     records: { type: Array },
@@ -31,25 +23,6 @@ class MainApp extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.generateNewScramble();
-  }
-
-  render() {
-    return html`
-      <main>
-        <cube-scramble
-          .currentScramble="${this.generatedScramble}"
-          @click="${this.generateNewScramble}"
-        ></cube-scramble>
-
-        <cube-timer
-          @timer-stopped="${this.saveRecord}"
-          @timer-running="${(e) => (this.isTimerRunning = e.detail)}"
-          .isScrambling="${this.isScrambling}"
-        ></cube-timer>
-
-        <record-list .records="${this.records}"></record-list>
-      </main>
-    `;
   }
 
   async generateNewScramble() {
@@ -78,6 +51,35 @@ class MainApp extends LitElement {
     this.isTimerRunning = false;
     await this.generateNewScramble();
   }
+
+  render() {
+    return html`
+      <main>
+        <cube-scramble
+          .currentScramble="${this.generatedScramble}"
+          @click="${this.generateNewScramble}"
+        ></cube-scramble>
+
+        <cube-timer
+          @timer-stopped="${this.saveRecord}"
+          @timer-running="${(e) => (this.isTimerRunning = e.detail)}"
+          .isScrambling="${this.isScrambling}"
+        ></cube-timer>
+
+        <record-list .records="${this.records}"></record-list>
+      </main>
+      <site-footer></site-footer>
+    `;
+  }
+
+  static styles = css`
+    main {
+      display: flex;
+      flex-direction: column;
+      padding: 2rem;
+      font-family: sans-serif;
+    }
+  `;
 }
 
 customElements.define("cube-app", MainApp);
