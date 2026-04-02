@@ -52,13 +52,16 @@ export class CubeTimer extends LitElement {
 
   handleKeyDown = (e) => {
     if (e.code == "Space") {
+      if (e.repeat) return;
       if (this.isScrambling && !this.isRunning) return;
       e.preventDefault();
 
-      if (!this.isRunning) {
-        this.isReady = true;
-      } else {
+      // if timer was running, stop it
+      if (this.isRunning) {
         this.stopTimer();
+      } else {
+        // if timer was stopped, ready for key up
+        this.isReady = true;
       }
     }
   };
