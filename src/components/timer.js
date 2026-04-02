@@ -1,14 +1,6 @@
 import { LitElement, html, css } from "lit";
 
 export class CubeTimer extends LitElement {
-  static styles = css`
-    .timer-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  `;
-
   static properties = {
     tens: { type: Number },
     seconds: { type: Number },
@@ -26,28 +18,22 @@ export class CubeTimer extends LitElement {
     this.isScrambling = true;
   }
 
-  render() {
-    const s = String(this.seconds).padStart(2, "0");
-    const t = String(this.tens).padStart(2, "0");
-    return html`
-      <div class="timer-container">
-        <p id="actual-timer"><span>${s}</span>:<span>${t}</span></p>
-        <button id="reset-button" @click="${this.resetTime}">Reset</button>
-      </div>
-    `;
-  }
-
   connectedCallback() {
     super.connectedCallback();
-
     window.addEventListener("keydown", this.handleKeyDown);
     window.addEventListener("keyup", this.handleKeyUp);
+    window.addEventListener("touchstart", this.handleTouchStart, {
+      passive: false,
+    });
+    window.addEventListener("touchend", this.handleTouchEnd);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener("keydown", this.handleKeyDown);
     window.removeEventListener("keyup", this.handleKeyUp);
+    window.removeEventListener("touchstart", this.handleTouchStart);
+    window.removeEventListener("touchend", this.handleTouchEnd);
   }
 
   handleKeyDown = (e) => {
@@ -56,11 +42,9 @@ export class CubeTimer extends LitElement {
       if (this.isScrambling && !this.isRunning) return;
       e.preventDefault();
 
-      // if timer was running, stop it
       if (this.isRunning) {
         this.stopTimer();
       } else {
-        // if timer was stopped, ready for key up
         this.isReady = true;
       }
     }
@@ -80,6 +64,39 @@ export class CubeTimer extends LitElement {
         );
         this.startTimer();
       }
+    }
+  };
+
+  handleTouchStart = (e) => {
+    const target = e.composedPath()[0];
+    if (e.target.tagName === "BUTTON" || e.target.tagName === "CUBE-SCRAMBLE")
+      return;
+
+    if (this.isScrambling && !this.isRunning) return;
+
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+
+    if (this.isRunning) {
+      this.stopTimer();
+    } else {
+      this.isReady = true;
+    }
+  };
+
+  handleTouchEnd = (e) => {
+    if (this.isReady) {
+      this.isReady = false;
+      this.isRunning = true;
+      this.dispatchEvent(
+        new CustomEvent("timer-running", {
+          detail: this.isRunning,
+          bubbles: true,
+          composed: true,
+        }),
+      );
+      this.startTimer();
     }
   };
 
@@ -120,6 +137,25 @@ export class CubeTimer extends LitElement {
 
     this.tens = this.seconds = 0;
   }
+
+  render() {
+    const s = String(this.seconds).padStart(2, "0");
+    const t = String(this.tens).padStart(2, "0");
+    return html`
+      <div class="timer-container">
+        <p id="actual-timer"><span>${s}</span>:<span>${t}</span></p>
+        <button id="reset-button" @click="${this.resetTime}">Reset</button>
+      </div>
+    `;
+  }
+
+  static styles = css`
+    .timer-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  `;
 }
 
 customElements.define("cube-timer", CubeTimer);
