@@ -55,31 +55,42 @@ class MainApp extends LitElement {
 
   render() {
     return html`
-      <main>
+      <div class="app-body">
         <site-header></site-header>
 
-        <cube-scramble
-          .currentScramble="${this.generatedScramble}"
-          @click="${this.generateNewScramble}"
-        ></cube-scramble>
+        <main>
+          <cube-scramble
+            .currentScramble="${this.generatedScramble}"
+            @click="${this.generateNewScramble}"
+          ></cube-scramble>
 
-        <cube-timer
-          @timer-stopped="${this.saveRecord}"
-          @timer-running="${(e) => (this.isTimerRunning = e.detail)}"
-          .isScrambling="${this.isScrambling}"
-        ></cube-timer>
+          <cube-timer
+            @timer-stopped="${this.saveRecord}"
+            @timer-running="${(e) => (this.isTimerRunning = e.detail)}"
+            .isScrambling="${this.isScrambling}"
+          ></cube-timer>
 
-        <record-list .records="${this.records}"></record-list>
-      </main>
+          <record-list .records="${this.records}"></record-list>
+        </main>
 
-      <site-footer></site-footer>
+        <site-footer></site-footer>
+      </div>
     `;
   }
 
   static styles = css`
+    .app-body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 100vh;
+      margin: 0;
+    }
+
     main {
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       padding: 2rem;
       font-family: sans-serif;
     }
