@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { randomScrambleForEvent } from "cubing/scramble";
 import "./components/layouts/footer.js";
+import "./components/layouts/header.js";
 import "./components/scramble.js";
 import "./components/timer.js";
 import "./components/records.js";
@@ -55,6 +56,8 @@ class MainApp extends LitElement {
   render() {
     return html`
       <main>
+        <site-header></site-header>
+
         <cube-scramble
           .currentScramble="${this.generatedScramble}"
           @click="${this.generateNewScramble}"
@@ -68,6 +71,7 @@ class MainApp extends LitElement {
 
         <record-list .records="${this.records}"></record-list>
       </main>
+
       <site-footer></site-footer>
     `;
   }
